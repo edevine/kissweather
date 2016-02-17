@@ -1,3 +1,5 @@
+import requestData from 'request';
+
 const secondsInDay = 24 * 60 * 60;
 
 const zipCodeInput = document.getElementById<HTMLInputElement>('zipcode');
@@ -17,9 +19,8 @@ hourlyForecastRowTemplate.parentNode.removeChild(hourlyForecastRowTemplate);
 zipCodeInput.addEventListener('change', () => {
     let zipCode = zipCodeInput.value;
     if (/^\d{5}$/.test(zipCode)) {
-        fetch('http://kissweather.com/data/weather?zip=' + zipCode + ',us')
-        .then(response => response.json())
-        .then((currentWeather: CurrentWeather) => {
+        
+        requestData('weather', zipCode).then(currentWeather => {
             if (currentWeather.cod === 200) {
                 locationOutput.textContent = currentWeather.name + ', ' + currentWeather.sys.country.toUpperCase();
                 currentTempOutput.textContent = (currentWeather.main.temp * (9 / 5) - 459.67).toFixed(0);
@@ -30,22 +31,18 @@ zipCodeInput.addEventListener('change', () => {
             }
         });
         
-        fetch('http://kissweather.com/data/forecast/daily?zip=' + zipCode + ',us')
-        .then(response => response.json())
-        .then((forecast: DailyForecast) => {
+        requestData('forecast/daily', zipCode).then(forecast => {
             dailyForecastTableBody.innerHTML = "";
             let lastDate = '';
             for (let i = 0; i < forecast.list.length; i++) {
                 let row = dailyForecastRowTemplate.cloneNode(true);
                 row.children[0].textContent = toDateStamp(forecast.list[i].dt);
                 row.children[1].textContent = toFahrenheit(forecast.list[i].temp.max).toFixed(0) + ' / ' + toFahrenheit(forecast.list[i].temp.min).toFixed(0);
-                dailyForecastRowTemplate.appendChild(row);
+                dailyForecastTableBody.appendChild(row);
             }
         });
         
-        fetch('http://kissweather.com/data/forecast?zip=' + zipCode + ',us')
-        .then(response => response.json())
-        .then((forecast: HourlyForecast) => {
+        requestData('forecast', zipCode).then(forecast => {
             hourlyForecastTableBody.innerHTML = "";
             let lastDate = '';
             for (let i = 0; i < forecast.list.length; i++) {
