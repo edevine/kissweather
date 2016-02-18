@@ -89,28 +89,30 @@ interface DailyForecast {
     };
     cnt: number;
     cod: string;
-    list: Array<{
-        clouds: number;
-        deg: number;
-        dt: number;
-        humidity: number;
-        pressure: number;
-        rain: number;
-        snow: number;
-        speed: number;
-        temp: {
-            day: number;
-            eve: number;
-            max: number;
-            min: number;
-            morn: number;
-            night: number;
-        };
-        weather: Array<{
-            description: string;
-            icon: string;
-            id: number;
-            main: string;
-        }>;
+    list: DailyForecastEntry[];
+}
+
+interface DailyForecastEntry {
+    clouds: number;
+    deg: number;
+    dt: number;
+    humidity: number;
+    pressure: number;
+    rain: number;
+    snow: number;
+    speed: number;
+    temp: {
+        day: number;
+        eve: number;
+        max: number;
+        min: number;
+        morn: number;
+        night: number;
+    };
+    weather: Array<{
+        description: string;
+        icon: string;
+        id: number;
+        main: string;
     }>;
 }

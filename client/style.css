@@ -1,0 +1,55 @@
+body {
+    color: #444;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 0px auto;
+    width: 416px;
+}
+
+header {
+    background-color: #f5f5f5;
+    margin: 4px 0px;
+    padding: 4px;
+}
+
+ul#daily-forecast {
+    display: flex;
+    margin: 4px 0px 0px 0px;
+    padding: 0;
+    text-align: center;
+    width: 416px;
+}
+ul#daily-forecast::after {
+    clear: left;
+}
+
+ul#daily-forecast li {
+    background-color: #f5f5f5;
+    list-style-type: none;
+    padding: 2px 0px;
+    width: 80px;
+}
+
+ul#daily-forecast li+li {
+    margin-left: 4px;
+}
+
+ul#daily-forecast p {
+    margin: 4px;
+}
+
+p.daily-day {
+    font-weight: bold;
+}
+
+img.daily-weather-icon {
+    margin: 4px;
+}
+
+p.daily-date {
+    font-size: 12px;
+}
+
+p.daily-temp {
+    font-size: 16px;
+}
