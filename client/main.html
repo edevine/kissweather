@@ -2,9 +2,10 @@
 <html>
     <head>
         <title>KISS Weather</title>
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
         <link rel="stylesheet" href="style.css">
         <link href='https://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
-        <script data-main="scripts/main" src="scripts/libs/require.js"></script>
+        <script data-main="scripts/main"  src="scripts/libs/require.js"></script>
     </head>
     <body>
         <header>
@@ -14,7 +15,12 @@
         <section id="current-conditions">
             <h2>Current Conditions</h2>
             <div class="current-conditions-content">
-                <img class="current-weather-icon">
+                <div class="current-weather">
+                    <img class="current-weather-icon">
+                    <p class="current-temp"></p>
+                    <p class="current-description"></p>
+                    <p class="current-wind"></p>
+                </div>
                 <table class="current-details">
                     <tr>
                         <th>Humidity</th>
@@ -33,15 +39,12 @@
                         <td class="current-sunset"></td>
                     </tr>
                 </table>
-                <p class="current-temp"></p>
-                <p class="current-description"></p>
-                <p class="current-wind"></p>
             </div>
         </section>
         <scection>
             <h2>Forecast</h2>
             <ul id="daily-forecast">
-                <li>
+                <li class="daily-forecast-card">
                     <p class="daily-day"></p>
                     <p class="daily-date"></p>
                     <img class="daily-weather-icon">
