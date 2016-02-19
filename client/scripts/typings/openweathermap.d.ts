@@ -28,6 +28,10 @@ interface CurrentWeather {
     id: number;
     name: string;
     cod: number;
+    wind: {
+        speed: number;
+        deg: number;
+    };
 }
 
 interface HourlyForecast {

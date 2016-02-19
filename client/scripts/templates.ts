@@ -37,7 +37,7 @@ function toMonth(date: Date) {
 }
 
 export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
-    if (templateElement.parentElement) {
+    if (templateElement.parentElement != null) {
         templateElement.parentElement.removeChild(templateElement);
     }
     
@@ -60,5 +60,40 @@ export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
         lowTempElement.textContent = units.toFahrenheit(dailyForecastEntry.temp.min).toFixed(0);
         
         return templateElement.cloneNode(true);
+    }
+}
+
+export function prepareCurrentConditionsTemplate(templateElement: HTMLElement) {
+    let parentElement = templateElement.parentElement;
+    if (parentElement != null) {
+        parentElement.removeChild(templateElement);
+    }
+    
+    let weatherIconElement = templateElement.querySelector<HTMLImageElement>('.current-weather-icon');
+    let temperatureElement = templateElement.querySelector<HTMLParagraphElement>('.current-temp');
+    let descriptionElement = templateElement.querySelector<HTMLParagraphElement>('.current-description');
+    let windElement = templateElement.querySelector<HTMLParagraphElement>('.current-wind');
+    let humidityElement = templateElement.querySelector<HTMLParagraphElement>('.current-humidity');
+    let pressureElement = templateElement.querySelector<HTMLParagraphElement>('.current-pressure');
+    let sunriseElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunrise');
+    let sunsetElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunset');
+    
+    return (weather: CurrentWeather) => {
+        if (templateElement.parentElement == null) {
+            parentElement.appendChild(templateElement);
+        }
+        let sunrise = new Date(weather.sys.sunrise * 1000);
+        let sunset = new Date(weather.sys.sunset * 1000);
+        
+        weatherIconElement.src = '/icons/' + toIconName(weather.weather[0].icon) + '.svg';
+        weatherIconElement.alt = weather.weather[0].description;
+        weatherIconElement.title = weather.weather[0].description;
+        temperatureElement.textContent = units.toFahrenheit(weather.main.temp).toFixed(0) + '\u00B0';
+        descriptionElement.textContent = weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1);
+        windElement.textContent = 'Wind ' + units.toCardinalDirection(weather.wind.deg) + ' ' + units.toMPH(weather.wind.speed).toFixed(0) + ' mph '
+        humidityElement.textContent = weather.main.humidity.toFixed(0) + '%';
+        pressureElement.textContent = weather.main.pressure.toFixed(0) + ' hpa';
+        sunriseElement.textContent = units.toTime(sunrise);
+        sunsetElement.textContent = units.toTime(sunset);
     }
 }

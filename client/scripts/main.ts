@@ -1,31 +1,43 @@
 import requestData from 'request';
 import * as templates from 'templates';
 import * as units from 'units';
+import toIconName from 'icons';
 
-let zipCodeInput = document.getElementById<HTMLInputElement>('zipcode');
+let locationInput = document.getElementById<HTMLInputElement>('location');
 
-let locationOutput = document.getElementById<HTMLElement>('location');
-let currentTempOutput = document.getElementById<HTMLElement>('current-temp');
+let currentConditionsContent = document.querySelector<HTMLElement>('.current-conditions-content');
+let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(currentConditionsContent);
 
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
 let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
 
-function renderHeader(weather: CurrentWeather) {
-    locationOutput.textContent = weather.name + ', ' + weather.sys.country.toUpperCase();
-    currentTempOutput.textContent = (weather.main.temp * (9 / 5) - 459.67).toFixed(0);
+function handleCurrentWeather(weather: CurrentWeather) {
+    locationInput.value = weather.name + ', ' + weather.sys.country.toUpperCase() + ' ' + lastZipCode;
+    renderCurrentConditions(weather);
 }
 
-function renderDailyForecast(dailyForecast: DailyForecast) {
+function handleDailyForecast(dailyForecast: DailyForecast) {
     dailyForecastList.innerHTML = "";
     for (let i = 0; i < 5; i++) {
         dailyForecastList.appendChild(renderDailyCard(dailyForecast.list[i]));
     }
 }
 
-zipCodeInput.addEventListener('change', () => {
-    let zipCode = zipCodeInput.value;
-    if (/^\d{5}$/.test(zipCode)) {
-        requestData('weather', zipCode).then(renderHeader);
-        requestData('forecast/daily', zipCode).then(renderDailyForecast);
+let lastZipCode: string = null;
+locationInput.addEventListener('change', () => {
+    let matches = /(\d{5})/.exec(locationInput.value)
+    if (matches != null) {
+        if (lastZipCode !== matches[1]) {
+            lastZipCode = matches[1];
+            requestData('weather', lastZipCode).then(handleCurrentWeather);
+            requestData('forecast/daily', lastZipCode).then(handleDailyForecast);
+        }
+    }
+    else {
+        locationInput.value = '';
+        dailyForecastList.innerHTML = '';
+        if (currentConditionsContent.parentElement) {
+            currentConditionsContent.parentElement.removeChild(currentConditionsContent);
+        }
     }
 });

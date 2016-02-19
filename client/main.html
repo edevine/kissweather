@@ -1,23 +1,53 @@
 <!doctype html>
 <html>
     <head>
-        <title>Weather Forecast</title>
+        <title>KISS Weather</title>
         <link rel="stylesheet" href="style.css">
+        <link href='https://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
         <script data-main="scripts/main" src="scripts/libs/require.js"></script>
     </head>
     <body>
         <header>
-            <label>Zip Code: <input type="text" id="zipcode"></label><br>
-            <label>Location: <output id="location"></output></label><br>
-            <label>Current Temp: <output id="current-temp"></output> &deg;F</label>
+            <h1>&#x1F48B; KISS Weather</h1>
+            <input type="text" id="location" placeholder="Location...">
         </header>
-        <ul id="daily-forecast">
-            <li>
-                <p class="daily-day"></p>
-                <p class="daily-date"></p>
-                <img class="daily-weather-icon">
-                <p class="daily-temp"><span class="daily-high-temp"></span>&deg; / <span class="daily-low-temp"></span>&deg;</p>
-            </li>
-        </ul>
+        <section id="current-conditions">
+            <h2>Current Conditions</h2>
+            <div class="current-conditions-content">
+                <img class="current-weather-icon">
+                <table class="current-details">
+                    <tr>
+                        <th>Humidity</th>
+                        <td class="current-humidity"></td>
+                    </tr>
+                    <tr>
+                        <th>Pressure</th>
+                        <td class="current-pressure"></td>
+                    </tr>
+                    <tr>
+                        <th>Sunrise</th>
+                        <td class="current-sunrise"></td>
+                    </tr>
+                    <tr>
+                        <th>Sunset</th>
+                        <td class="current-sunset"></td>
+                    </tr>
+                </table>
+                <p class="current-temp"></p>
+                <p class="current-description"></p>
+                <p class="current-wind"></p>
+            </div>
+        </section>
+        <scection>
+            <h2>Forecast</h2>
+            <ul id="daily-forecast">
+                <li>
+                    <p class="daily-day"></p>
+                    <p class="daily-date"></p>
+                    <img class="daily-weather-icon">
+                    <p class="daily-temp"><span class="daily-high-temp"></span>&deg; / <span class="daily-low-temp"></span>&deg;</p>
+                </li>
+            </ul>
+        </section>
     </body>
 </html>
