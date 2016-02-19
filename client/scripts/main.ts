@@ -11,6 +11,8 @@ let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(current
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
 let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
 
+let lastZipCode: string = null;
+
 function handleCurrentWeather(weather: CurrentWeather) {
     locationInput.value = weather.name + ', ' + weather.sys.country.toUpperCase() + ' ' + lastZipCode;
     renderCurrentConditions(weather);
@@ -23,7 +25,6 @@ function handleDailyForecast(dailyForecast: DailyForecast) {
     }
 }
 
-let lastZipCode: string = null;
 locationInput.addEventListener('change', () => {
     let matches = /(\d{5})/.exec(locationInput.value)
     if (matches != null) {
