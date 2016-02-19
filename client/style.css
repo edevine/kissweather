@@ -99,7 +99,9 @@ p.daily-day {
 }
 
 img.daily-weather-icon {
-    margin: 4px;
+    box-sizing: border-box;
+    padding: 4px;
+    width: 100%;
 }
 
 p {
