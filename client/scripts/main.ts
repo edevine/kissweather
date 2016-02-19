@@ -34,6 +34,7 @@ locationInput.addEventListener('change', () => {
         }
     }
     else {
+        lastZipCode = '';
         locationInput.value = '';
         dailyForecastList.innerHTML = '';
         if (currentConditionsContent.parentElement) {
