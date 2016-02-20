@@ -6,7 +6,8 @@ import toIconName from 'icons';
 let locationInput = document.getElementById<HTMLInputElement>('location');
 
 let currentConditionsContent = document.querySelector<HTMLElement>('.current-conditions-content');
-let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(currentConditionsContent);
+let currentTimeElement = document.querySelector<HTMLSpanElement>('.current-time');
+let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(currentConditionsContent, currentTimeElement);
 
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
 let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
@@ -38,6 +39,7 @@ locationInput.addEventListener('change', () => {
         lastZipCode = '';
         locationInput.value = '';
         dailyForecastList.innerHTML = '';
+        currentTimeElement.textContent = '';
         if (currentConditionsContent.parentElement) {
             currentConditionsContent.parentElement.removeChild(currentConditionsContent);
         }

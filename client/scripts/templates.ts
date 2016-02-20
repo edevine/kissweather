@@ -63,7 +63,7 @@ export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
     }
 }
 
-export function prepareCurrentConditionsTemplate(templateElement: HTMLElement) {
+export function prepareCurrentConditionsTemplate(templateElement: HTMLElement, currentTimeElement: HTMLSpanElement) {
     let parentElement = templateElement.parentElement;
     if (parentElement != null) {
         parentElement.removeChild(templateElement);
@@ -82,9 +82,12 @@ export function prepareCurrentConditionsTemplate(templateElement: HTMLElement) {
         if (templateElement.parentElement == null) {
             parentElement.appendChild(templateElement);
         }
+        
+        let date = new Date(weather.dt * 1000);
         let sunrise = new Date(weather.sys.sunrise * 1000);
         let sunset = new Date(weather.sys.sunset * 1000);
         
+        currentTimeElement.textContent = units.toTime(date)
         weatherIconElement.src = '/icons/' + toIconName(weather.weather[0].icon) + '.svg';
         weatherIconElement.alt = weather.weather[0].description;
         weatherIconElement.title = weather.weather[0].description;
