@@ -1,4 +1,3 @@
-import requestData from 'request';
 import * as templates from 'templates';
 import * as units from 'units';
 import toIconName from 'icons';
@@ -14,15 +13,16 @@ let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.query
 
 let lastZipCode: string = null;
 
-function handleCurrentWeather(weather: CurrentWeather) {
-    locationInput.value = weather.name + ', ' + weather.sys.country.toUpperCase() + ' ' + lastZipCode;
-    renderCurrentConditions(weather);
+function toJson(response: Response) {
+    return response.json();
 }
 
-function handleDailyForecast(dailyForecast: DailyForecast) {
+function renderView(weather: Weather) {
+    locationInput.value = weather.current.name + ', ' + weather.current.sys.country.toUpperCase() + ' ' + lastZipCode;
+    renderCurrentConditions(weather.current);
     dailyForecastList.innerHTML = "";
     for (let i = 0; i < 5; i++) {
-        dailyForecastList.appendChild(renderDailyCard(dailyForecast.list[i]));
+        dailyForecastList.appendChild(renderDailyCard(weather.dailyForecast.list[i]));
     }
 }
 
@@ -31,8 +31,7 @@ locationInput.addEventListener('change', () => {
     if (matches != null) {
         if (lastZipCode !== matches[1]) {
             lastZipCode = matches[1];
-            requestData('weather', lastZipCode).then(handleCurrentWeather);
-            requestData('forecast/daily', lastZipCode).then(handleDailyForecast);
+            fetch('http://api.kissweather.com/us/' + lastZipCode).then(toJson).then(renderView);
         }
     }
     else {

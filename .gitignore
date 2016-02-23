@@ -1,2 +1,3 @@
 *.js
 !client/scripts/libs/*.js
+node_modules
