@@ -18,11 +18,11 @@ function toJson(response: Response) {
 }
 
 function renderView(weather: Weather) {
-    locationInput.value = weather.current.name + ', ' + weather.current.sys.country.toUpperCase() + ' ' + lastZipCode;
+    locationInput.value = weather.location.city + ', ' + weather.location.country + ' ' + lastZipCode;
     renderCurrentConditions(weather.current);
     dailyForecastList.innerHTML = "";
     for (let i = 0; i < 5; i++) {
-        dailyForecastList.appendChild(renderDailyCard(weather.dailyForecast.list[i]));
+        dailyForecastList.appendChild(renderDailyCard(weather.daily[i]));
     }
 }
 

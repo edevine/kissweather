@@ -1,4 +1,4 @@
-interface CurrentWeather {
+interface OWMCurrentWeather {
     coord: {
         lon: number;
         lat: number;
@@ -34,7 +34,7 @@ interface CurrentWeather {
     };
 }
 
-interface HourlyForecast {
+interface OWMHourlyForecast {
     city: {
         id: number;
         name: string;
@@ -51,36 +51,38 @@ interface HourlyForecast {
     cod: string;
     message: number;
     cnt: number;
-    list: Array<{
-        dt: number;
-        main: {
-            temp: number;
-            temp_min: number;
-            temp_max: number;
-            pressure: number;
-            sea_level: number;
-            grnd_level: number;
-            humidity: number;
-            temp_kf: number;
-        };
-        weather: Array<{
-            id: number;
-            main: string;
-            description: string;
-            icon: string;
-        }>;
-        clouds: {
-            all: number;
-        };
-        winds: {
-            speed: number;
-            deg: number;  
-        };
-        dt_txt: string;
-    }>;
+    list: OWMHourlyForecastEntry[];
 }
 
-interface DailyForecast {
+interface OWMHourlyForecastEntry {
+    dt: number;
+    main: {
+        temp: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        sea_level: number;
+        grnd_level: number;
+        humidity: number;
+        temp_kf: number;
+    };
+    weather: Array<{
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    }>;
+    clouds: {
+        all: number;
+    };
+    wind: {
+        speed: number;
+        deg: number;  
+    };
+    dt_txt: string;
+}
+
+interface OWMDailyForecast {
     city: {
         id: number;
         name: string;
@@ -93,10 +95,10 @@ interface DailyForecast {
     };
     cnt: number;
     cod: string;
-    list: DailyForecastEntry[];
+    list: OWMDailyForecastEntry[];
 }
 
-interface DailyForecastEntry {
+interface OWMDailyForecastEntry {
     clouds: number;
     deg: number;
     dt: number;

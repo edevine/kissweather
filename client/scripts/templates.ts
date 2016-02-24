@@ -47,15 +47,15 @@ export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
     let highTempElement = templateElement.querySelector('.daily-high-temp');
     let lowTempElement = templateElement.querySelector('.daily-low-temp');
     
-    return (dailyForecastEntry: DailyForecastEntry) => {
+    return (dailyForecastEntry: DailyConditions) => {
         let now  = new Date();
-        let date = new Date(dailyForecastEntry.dt * 1000);
+        let date = new Date(dailyForecastEntry.time * 1000);
         
         dayElement.textContent = toDayOfWeek(date.getDay(), now.getDay());
         dateElement.textContent = toMonth(date) + ' ' + date.getDate();
-        weatherIconElement.src = '/icons/' + toIconName(dailyForecastEntry.weather[0].icon) + '.svg';
-        weatherIconElement.alt = dailyForecastEntry.weather[0].description;
-        weatherIconElement.title = dailyForecastEntry.weather[0].description;
+        weatherIconElement.src = '/icons/' + toIconName(dailyForecastEntry.icon) + '.svg';
+        weatherIconElement.alt = dailyForecastEntry.description;
+        weatherIconElement.title = dailyForecastEntry.description;
         highTempElement.textContent = units.toFahrenheit(dailyForecastEntry.temp.max).toFixed(0);
         lowTempElement.textContent = units.toFahrenheit(dailyForecastEntry.temp.min).toFixed(0);
         
@@ -78,24 +78,24 @@ export function prepareCurrentConditionsTemplate(templateElement: HTMLElement, c
     let sunriseElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunrise');
     let sunsetElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunset');
     
-    return (weather: CurrentWeather) => {
+    return (current: CurrentConditions) => {
         if (templateElement.parentElement == null) {
             parentElement.appendChild(templateElement);
         }
         
-        let date = new Date(weather.dt * 1000);
-        let sunrise = new Date(weather.sys.sunrise * 1000);
-        let sunset = new Date(weather.sys.sunset * 1000);
+        let date = new Date(current.time * 1000);
+        let sunrise = new Date(current.sunrise * 1000);
+        let sunset = new Date(current.sunset * 1000);
         
         currentTimeElement.textContent = units.toTime(date)
-        weatherIconElement.src = '/icons/' + toIconName(weather.weather[0].icon) + '.svg';
-        weatherIconElement.alt = weather.weather[0].description;
-        weatherIconElement.title = weather.weather[0].description;
-        temperatureElement.textContent = units.toFahrenheit(weather.main.temp).toFixed(0) + '\u00B0';
-        descriptionElement.textContent = weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1);
-        windElement.textContent = 'Wind ' + units.toCardinalDirection(weather.wind.deg) + ' ' + units.toMPH(weather.wind.speed).toFixed(0) + ' mph '
-        humidityElement.textContent = weather.main.humidity.toFixed(0) + '%';
-        pressureElement.textContent = weather.main.pressure.toFixed(0) + ' hpa';
+        weatherIconElement.src = '/icons/' + toIconName(current.icon) + '.svg';
+        weatherIconElement.alt = current.description;
+        weatherIconElement.title = current.description;
+        temperatureElement.textContent = units.toFahrenheit(current.temp).toFixed(0) + '\u00B0';
+        descriptionElement.textContent = current.description;
+        windElement.textContent = 'Wind ' + units.toCardinalDirection(current.wind.direction) + ' ' + units.toMPH(current.wind.speed).toFixed(0) + ' mph '
+        humidityElement.textContent = current.humidity.toFixed(0) + '%';
+        pressureElement.textContent = current.pressure.toFixed(0) + ' hpa';
         sunriseElement.textContent = units.toTime(sunrise);
         sunsetElement.textContent = units.toTime(sunset);
     }
