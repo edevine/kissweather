@@ -7,7 +7,7 @@
         <link href='https://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
         <script type="application/javascript" src="scripts/libs/es6-promise.js"></script>
         <script type="application/javascript" src="scripts/libs/fetch.js"></script>
-        <script data-main="scripts/main" src="scripts/libs/require.js"></script>
+        <script data-main="scripts/config" src="scripts/libs/require.js"></script>
     </head>
     <body>
         <header>
@@ -53,6 +53,10 @@
                     <p class="daily-temp"><span class="daily-high-temp"></span>&deg; / <span class="daily-low-temp"></span>&deg;</p>
                 </li>
             </ul>
+        </section>
+        <section>
+            <h2>Hourly</h2>
+            <svg id="hourly-forecast" height="300" width="400"></svg>
         </section>
     </body>
 </html>

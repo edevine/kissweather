@@ -1,6 +1,7 @@
 import * as templates from 'templates';
 import * as units from 'units';
 import toIconName from 'icons';
+import { drawHourly } from 'hourly';
 
 let locationInput = document.getElementById<HTMLInputElement>('location');
 
@@ -10,6 +11,8 @@ let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(current
 
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
 let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
+
+let hourlyForecast = document.getElementById<SVGSVGElement>('hourly-forecast');
 
 let lastZipCode: string = null;
 
@@ -24,6 +27,7 @@ function renderView(weather: Weather) {
     for (let i = 0; i < 5; i++) {
         dailyForecastList.appendChild(renderDailyCard(weather.daily[i]));
     }
+    drawHourly(hourlyForecast, weather.hourly.slice(0, 8));
 }
 
 locationInput.addEventListener('change', () => {
@@ -42,5 +46,6 @@ locationInput.addEventListener('change', () => {
         if (currentConditionsContent.parentElement) {
             currentConditionsContent.parentElement.removeChild(currentConditionsContent);
         }
+        hourlyForecast.textContent = '';
     }
 });
