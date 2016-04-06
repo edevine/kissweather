@@ -4,8 +4,5 @@
         "noImplicitAny": true,
         "removeComments": true
     },
-    "target": "ES5",
-    "exclude": [
-        "libs"
-    ]
+    "target": "ES5"
 }

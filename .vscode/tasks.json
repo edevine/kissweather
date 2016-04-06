@@ -1,0 +1,23 @@
+{
+    "version": "0.1.0",
+    "command": "npm",
+    "suppressTaskName": true,
+    "isShellCommand": true,
+    "showOutput": "silent",
+    "args": [],
+    "tasks": [
+        {
+            "taskName": "npm-install",
+            "args": ["install"]
+        },
+        {
+            "taskName": "tsc-client",
+            "args": ["run", "tsc-client"],
+            "isBuildCommand": true
+        },
+        {
+            "taskName": "tsc-server",
+            "args": ["run", "tsc-server"]
+        }
+    ]
+}

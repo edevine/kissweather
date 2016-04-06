@@ -1,0 +1,16 @@
+{
+  "name": "kissweather",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "node-fetch": "^1.3.3"
+  },
+  "devDependencies": {
+    "typescript": "~1.9.0-dev.20160405"
+  },
+  "scripts": {
+    "tsc-client": "tsc -p client/scripts",
+    "tsc-server": "tsc -p data-api"
+  },
+  "author": "Eric Devine"
+}
