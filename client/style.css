@@ -75,19 +75,29 @@ div.current-conditions-content p.current-temp {
 }
 
 ul#daily-forecast {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
     display: flex;
     margin: 4px 0px 0px 0px;
+    overflow: hidden;
     padding: 0;
     text-align: center;
 }
 
+.grabbing, .grabbing ul#daily-forecast {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
 li.daily-forecast-card {
     background-color: #f5f5f5;
-    flex-grow: 1;
+    display: block;
     list-style-type: none;
     padding: 2px 0px;
-    min-width: 60px;
     max-width: 80px;
+    min-width: 80px;
 }
 
 li+li.daily-forecast-card {

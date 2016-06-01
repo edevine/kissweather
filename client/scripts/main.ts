@@ -2,6 +2,7 @@ import * as templates from 'templates';
 import * as units from 'units';
 import toIconName from 'icons';
 import { drawHourly } from 'hourly';
+import { enableDailyScrolling } from 'scrolling';
 
 let locationInput = document.getElementById<HTMLInputElement>('location');
 
@@ -24,14 +25,14 @@ function renderView(weather: Weather) {
     locationInput.value = weather.location.city + ', ' + weather.location.country + ' ' + lastZipCode;
     renderCurrentConditions(weather.current);
     dailyForecastList.innerHTML = "";
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < weather.daily.length; i++) {
         dailyForecastList.appendChild(renderDailyCard(weather.daily[i]));
     }
     drawHourly(hourlyForecast, weather.hourly.slice(0, 8));
 }
 
 locationInput.addEventListener('change', () => {
-    let matches = /(\d{5})/.exec(locationInput.value)
+    let matches = /(\d{5})/.exec(locationInput.value);
     if (matches != null) {
         if (lastZipCode !== matches[1]) {
             lastZipCode = matches[1];
@@ -49,3 +50,5 @@ locationInput.addEventListener('change', () => {
         hourlyForecast.textContent = '';
     }
 });
+
+enableDailyScrolling(dailyForecastList);
