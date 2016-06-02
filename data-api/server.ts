@@ -39,7 +39,7 @@ function requestData(dataSource: 'forecast/daily', zipCode: string): Promise<OWM
 function requestData(dataSource: 'forecast', zipCode: string): Promise<OWMHourlyForecast>;
 function requestData(dataSource: string, zipCode: string): Promise<any>;
 function requestData(dataSource: string, zipCode: string): Promise<any> {
-    return fetch('http://api.openweathermap.org/data/2.5/' + dataSource + '?zip=' + zipCode + ',us' + '&appid=' + appId).then(response => {
+    return fetch('http://api.openweathermap.org/data/2.5/' + dataSource + '?cnt=10&zip=' + zipCode + ',us' + '&appid=' + appId).then(response => {
         switch (response.status) {
             case 200: return response.json();
             case 429: return requestData(dataSource, zipCode);
