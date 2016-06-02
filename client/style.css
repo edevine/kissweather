@@ -151,16 +151,3 @@ table.current-details th {
 table.current-details td {
     text-align: right;
 }
-
-g.axis {
-    font-size: 13px;
-    fill: none;
-    shape-rendering: crispEdges;
-    stroke: #444;
-}
-
-path.temp {
-    fill: none;
-    stroke: #d7588b;
-    stroke-width: 2;
-}

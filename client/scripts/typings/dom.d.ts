@@ -1,5 +1,5 @@
 interface Document {
-    getElementById<Node extends Element>(elementId: string): Node;
+    getElementById<Node extends HTMLElement>(elementId: string): Node;
 }
 
 interface NodeSelector {
