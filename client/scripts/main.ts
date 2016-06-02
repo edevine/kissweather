@@ -2,7 +2,7 @@ import * as templates from 'templates';
 import * as units from 'units';
 import toIconName from 'icons';
 import { drawHourly } from 'hourly';
-import { enableDailyScrolling } from 'scrolling';
+import { enableDailyScrolling, enableKeyboardScrolling } from 'scrolling';
 
 let locationInput = document.getElementById<HTMLInputElement>('location');
 
@@ -49,6 +49,13 @@ locationInput.addEventListener('change', () => {
         }
         hourlyForecast.textContent = '';
     }
+    locationInput.blur();
+});
+
+locationInput.addEventListener('keydown', event => {
+    // Prevent keyboard scrolling of daily forecast
+    event.stopPropagation();
 });
 
 enableDailyScrolling(dailyForecastList);
+enableKeyboardScrolling(dailyForecastList);

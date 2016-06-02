@@ -46,3 +46,54 @@ export function enableDailyScrolling(element: HTMLElement) {
     window.addEventListener('touchcancel', onTouchEnd);
     window.addEventListener('blur', onTouchEnd);
 }
+
+    
+export function enableKeyboardScrolling(element: HTMLElement) {
+    let scheduledAnimationFrame: number = null;
+    let departed: number = null;
+    let destination: number = null;
+    let eta: number = null;
+
+    function cancelKeyboardScrolling() {
+        cancelAnimationFrame(scheduledAnimationFrame);
+        scheduledAnimationFrame = null;
+        destination = null;
+        eta = null;
+    }
+    
+    function scroll(time: number) {
+        if (time >= eta) {
+            element.scrollLeft = destination;
+            scheduledAnimationFrame = null;
+            destination = null;
+            eta = null;
+            return;
+        }
+        element.scrollLeft = destination - (eta - time) / 250 * (destination - departed);
+        scheduledAnimationFrame = requestAnimationFrame(scroll);
+    }
+    
+    element.addEventListener('mousedown', cancelKeyboardScrolling);
+    element.addEventListener('touchstart', cancelKeyboardScrolling);
+    
+    window.addEventListener('keydown', event => {
+        if (event.keyCode !== 37 && event.keyCode !== 39) {
+            return;
+        }
+        
+        departed = element.scrollLeft;
+        const position = destination != null ? destination : departed;
+        const newDestination = event.keyCode === 37
+            ? Math.max((Math.ceil((position) / 84) - 1) * 84, 0) // Left
+            : Math.min((Math.floor((position) / 84) + 1) * 84, element.scrollWidth - element.clientWidth); // Right
+        
+        if (destination !== newDestination) {
+            destination = newDestination;
+            eta = performance.now() + 250;
+            if (scheduledAnimationFrame == null) {
+                scheduledAnimationFrame = requestAnimationFrame(scroll);
+            }
+        }
+    });
+    
+}
