@@ -15,8 +15,8 @@ http.createServer((request, response) => {
         
         Promise.all<OWMCurrentWeather | OWMDailyForecast | OWMHourlyForecast>([
             requestData('weather', zipCode),
-            requestData('forecast/daily', zipCode),
-            requestData('forecast', zipCode)
+            requestData('forecast/daily', zipCode, 10),
+            requestData('forecast', zipCode, 16)
         ]).then((data: [OWMCurrentWeather, OWMDailyForecast, OWMHourlyForecast]) => {
             let weather = toWeather(data[0], data[1], data[2]);
             response.setHeader('Content-Type', 'application/json');
@@ -35,11 +35,11 @@ http.createServer((request, response) => {
 }).listen(8081);
 
 function requestData(dataSource: 'weather', zipCode: string): Promise<OWMCurrentWeather>;
-function requestData(dataSource: 'forecast/daily', zipCode: string): Promise<OWMDailyForecast>;
-function requestData(dataSource: 'forecast', zipCode: string): Promise<OWMHourlyForecast>;
-function requestData(dataSource: string, zipCode: string): Promise<any>;
-function requestData(dataSource: string, zipCode: string): Promise<any> {
-    return fetch('http://api.openweathermap.org/data/2.5/' + dataSource + '?cnt=10&zip=' + zipCode + ',us' + '&appid=' + appId).then(response => {
+function requestData(dataSource: 'forecast/daily', zipCode: string, count: number): Promise<OWMDailyForecast>;
+function requestData(dataSource: 'forecast', zipCode: string, count: number): Promise<OWMHourlyForecast>;
+function requestData(dataSource: string, zipCode: string, count?: number): Promise<any>;
+function requestData(dataSource: string, zipCode: string, count?: number): Promise<any> {
+    return fetch('http://api.openweathermap.org/data/2.5/' + dataSource + '?' + (count != null ? 'cnt=' + count + '&' : '') + 'zip=' + zipCode + ',us' + '&appid=' + appId).then(response => {
         switch (response.status) {
             case 200: return response.json();
             case 429: return requestData(dataSource, zipCode);

@@ -151,3 +151,41 @@ table.current-details th {
 table.current-details td {
     text-align: right;
 }
+
+.hourly-forecast {
+    border-collapse: collapse;
+    width:100%;
+}
+
+.hourly-forecast thead tr {
+    height:24px;
+    background-color: #eee;
+}
+
+tr.hourly-hour {
+    height:48px;
+}
+
+.hourly-forecast img {
+    height:36px;
+    width:36px;
+}
+.hourly-temp {
+    font-size: 20px;
+    text-align: center;
+}
+
+.hourly-day {
+    background-color: #eee;
+    font-size: 12px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.hourly-icon {
+    padding-left: 10px;
+}
+
+.hourly-humidity {
+    text-align: center;
+}

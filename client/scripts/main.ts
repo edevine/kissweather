@@ -1,5 +1,4 @@
-import * as templates from 'templates';
-import * as units from 'units';
+import { prepareCurrentConditionsTemplate, prepareDailyCardTemplate, createHourlyRow } from 'templates';
 import toIconName from 'icons';
 import { enableDailyScrolling, enableKeyboardScrolling } from 'scrolling';
 
@@ -7,10 +6,12 @@ let locationInput = document.getElementById<HTMLInputElement>('location');
 
 let currentConditionsContent = document.querySelector<HTMLElement>('.current-conditions-content');
 let currentTimeElement = document.querySelector<HTMLSpanElement>('.current-time');
-let renderCurrentConditions = templates.prepareCurrentConditionsTemplate(currentConditionsContent, currentTimeElement);
+let renderCurrentConditions = prepareCurrentConditionsTemplate(currentConditionsContent, currentTimeElement);
 
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
-let renderDailyCard = templates.prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
+let createDailyCard = prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
+
+const hourlyForecastTable = document.getElementById<HTMLTableSectionElement>('hourly-forecast');
 
 let lastZipCode: string = null;
 
@@ -18,13 +19,19 @@ function toJson(response: Response) {
     return response.json();
 }
 
+function appendChild(parent: Node, child: Node) {
+    parent.appendChild(child);
+    return parent;
+}
+
 function renderView(weather: Weather) {
     locationInput.value = weather.location.city + ', ' + weather.location.country + ' ' + lastZipCode;
     renderCurrentConditions(weather.current);
     dailyForecastList.innerHTML = "";
-    for (let i = 0; i < weather.daily.length; i++) {
-        dailyForecastList.appendChild(renderDailyCard(weather.daily[i]));
-    }
+    hourlyForecastTable.innerHTML = "";
+    
+    weather.daily.map(createDailyCard).reduce(appendChild, dailyForecastList);
+    weather.hourly.map(createHourlyRow).reduce(appendChild, hourlyForecastTable);
 }
 
 locationInput.addEventListener('change', () => {

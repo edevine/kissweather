@@ -1,4 +1,4 @@
-import * as units from 'units';
+import { toCardinalDirection, toFahrenheit, toMPH, toTime } from 'units';
 import toIconName from 'icons';
 
 function toDayOfWeek(day: number): string;
@@ -56,8 +56,8 @@ export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
         weatherIconElement.src = '/icons/' + toIconName(dailyForecastEntry.icon) + '.svg';
         weatherIconElement.alt = dailyForecastEntry.description;
         weatherIconElement.title = dailyForecastEntry.description;
-        highTempElement.textContent = units.toFahrenheit(dailyForecastEntry.temp.max).toFixed(0);
-        lowTempElement.textContent = units.toFahrenheit(dailyForecastEntry.temp.min).toFixed(0);
+        highTempElement.textContent = toFahrenheit(dailyForecastEntry.temp.max).toFixed(0);
+        lowTempElement.textContent = toFahrenheit(dailyForecastEntry.temp.min).toFixed(0);
         
         return templateElement.cloneNode(true);
     }
@@ -87,16 +87,45 @@ export function prepareCurrentConditionsTemplate(templateElement: HTMLElement, c
         let sunrise = new Date(current.sunrise * 1000);
         let sunset = new Date(current.sunset * 1000);
         
-        currentTimeElement.textContent = units.toTime(date)
+        currentTimeElement.textContent = toTime(date);
         weatherIconElement.src = '/icons/' + toIconName(current.icon) + '.svg';
         weatherIconElement.alt = current.description;
         weatherIconElement.title = current.description;
-        temperatureElement.textContent = units.toFahrenheit(current.temp).toFixed(0) + '\u00B0';
+        temperatureElement.textContent = toFahrenheit(current.temp).toFixed(0) + '\u00B0';
         descriptionElement.textContent = current.description;
-        windElement.textContent = 'Wind ' + units.toCardinalDirection(current.wind.direction) + ' ' + units.toMPH(current.wind.speed).toFixed(0) + ' mph '
+        windElement.textContent = 'Wind ' + toCardinalDirection(current.wind.direction) + ' ' + toMPH(current.wind.speed).toFixed(0) + ' mph '
         humidityElement.textContent = current.humidity.toFixed(0) + '%';
         pressureElement.textContent = current.pressure.toFixed(0) + ' hpa';
-        sunriseElement.textContent = units.toTime(sunrise);
-        sunsetElement.textContent = units.toTime(sunset);
+        sunriseElement.textContent = toTime(sunrise);
+        sunsetElement.textContent = toTime(sunset);
     }
+}
+
+export function createHourlyRow(conditions: HourlyConditions, index: number): DocumentFragment {
+    const fragment = document.createDocumentFragment();
+
+    const date = new Date(conditions.time * 1000);
+    const isNewDay = date.getHours() <= 2 && index !== 0;
+    
+    if (isNewDay) {
+        const tr = fragment.appendChild(document.createElement('tr'));
+        const th = tr.appendChild(document.createElement('th'));
+        th.textContent = toDayOfWeek(date.getDay(), new Date().getDay());
+        th.colSpan = 5;
+        th.className = 'hourly-day';
+    }
+
+    const tr = fragment.appendChild(document.createElement('tr'));
+    tr.className ='hourly-hour';
+    
+    tr.appendChild(document.createElement('td')).textContent = toTime(date);
+    tr.appendChild(document.createElement('td')).textContent = toFahrenheit(conditions.temp).toFixed(0) + '\u00B0';
+    tr.lastElementChild.className = 'hourly-temp';
+    tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).src = '/icons/' + toIconName(conditions.icon) + '.svg';
+    tr.lastElementChild.className = 'hourly-icon';
+    tr.appendChild(document.createElement('td')).textContent = conditions.description;
+    tr.appendChild(document.createElement('td')).textContent = conditions.humidity.toFixed(0) + '%';
+    tr.lastElementChild.className = 'hourly-humidity';
+
+    return fragment;
 }

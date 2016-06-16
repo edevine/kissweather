@@ -14,3 +14,7 @@ interface Element {
 interface HTMLElement {
     cloneNode(deep?: boolean): HTMLElement;
 }
+
+interface Node {
+    appendChild<Element extends Node>(newChild: Element): Element;
+}
