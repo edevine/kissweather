@@ -15,10 +15,6 @@ const hourlyForecastTable = document.getElementById<HTMLTableSectionElement>('ho
 
 let lastZipCode: string = null;
 
-function toJson(response: Response) {
-    return response.json();
-}
-
 function appendChild(parent: Node, child: Node) {
     parent.appendChild(child);
     return parent;
@@ -34,12 +30,15 @@ function renderView(weather: Weather) {
     weather.hourly.map(createHourlyRow).reduce(appendChild, hourlyForecastTable);
 }
 
+const xhr = new XMLHttpRequest();
+
 locationInput.addEventListener('change', () => {
     let matches = /(\d{5})/.exec(locationInput.value);
     if (matches != null) {
         if (lastZipCode !== matches[1]) {
             lastZipCode = matches[1];
-            fetch('http://api.kissweather.com/us/' + lastZipCode).then(toJson).then(renderView);
+            xhr.open('GET', 'http://api.kissweather.com/us/' + lastZipCode);
+            xhr.send();
         }
     }
     else {
@@ -53,6 +52,12 @@ locationInput.addEventListener('change', () => {
     }
     locationInput.blur();
 });
+
+xhr.onreadystatechange = event => {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        renderView(JSON.parse(xhr.responseText));
+    }
+};
 
 locationInput.addEventListener('keydown', event => {
     // Prevent keyboard scrolling of daily forecast
