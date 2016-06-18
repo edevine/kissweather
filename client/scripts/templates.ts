@@ -1,6 +1,12 @@
 import { toCardinalDirection, toFahrenheit, toMPH, toTime } from 'units';
 import toIconName from 'icons';
 
+const currentConditionsContent = document.querySelector<HTMLElement>('.current-conditions-content');
+
+const dailyForecastCardTemplate = document.getElementById<DailyForecastListElement>('daily-forecast').children[0];
+dailyForecastCardTemplate.parentNode.removeChild(dailyForecastCardTemplate);
+dailyForecastCardTemplate.style.removeProperty('display');
+
 function toDayOfWeek(day: number): string;
 function toDayOfWeek(day: number, today: number): string;
 function toDayOfWeek(day: number, today?: number) {
@@ -36,56 +42,30 @@ function toMonth(date: Date) {
         default: throw new TypeError('Invalid date: ' + String(date));    }
 }
 
-export function prepareDailyCardTemplate(templateElement: HTMLLIElement) {
-    if (templateElement.parentElement != null) {
-        templateElement.parentElement.removeChild(templateElement);
-    }
-    
-    let dayElement = templateElement.querySelector('.daily-day');
-    let dateElement = templateElement.querySelector('.daily-date');
-    let weatherIconElement = templateElement.querySelector<HTMLImageElement>('.daily-weather-icon');
-    let highTempElement = templateElement.querySelector('.daily-high-temp');
-    let lowTempElement = templateElement.querySelector('.daily-low-temp');
-    
-    return (dailyForecastEntry: DailyConditions) => {
-        let now  = new Date();
-        let date = new Date(dailyForecastEntry.time * 1000);
-        
-        dayElement.textContent = toDayOfWeek(date.getDay(), now.getDay());
-        dateElement.textContent = toMonth(date) + ' ' + date.getDate();
-        weatherIconElement.src = '/icons/' + toIconName(dailyForecastEntry.icon) + '.svg';
-        weatherIconElement.alt = dailyForecastEntry.description;
-        weatherIconElement.title = dailyForecastEntry.description;
-        highTempElement.textContent = toFahrenheit(dailyForecastEntry.temp.max).toFixed(0);
-        lowTempElement.textContent = toFahrenheit(dailyForecastEntry.temp.min).toFixed(0);
-        
-        return templateElement.cloneNode(true);
-    }
-}
-
 export function prepareCurrentConditionsTemplate(templateElement: HTMLElement, currentTimeElement: HTMLSpanElement) {
-    let parentElement = templateElement.parentElement;
+    const parentElement = templateElement.parentElement;
     if (parentElement != null) {
         parentElement.removeChild(templateElement);
     }
+    templateElement.style.removeProperty('display');
     
-    let weatherIconElement = templateElement.querySelector<HTMLImageElement>('.current-weather-icon');
-    let temperatureElement = templateElement.querySelector<HTMLParagraphElement>('.current-temp');
-    let descriptionElement = templateElement.querySelector<HTMLParagraphElement>('.current-description');
-    let windElement = templateElement.querySelector<HTMLParagraphElement>('.current-wind');
-    let humidityElement = templateElement.querySelector<HTMLParagraphElement>('.current-humidity');
-    let pressureElement = templateElement.querySelector<HTMLParagraphElement>('.current-pressure');
-    let sunriseElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunrise');
-    let sunsetElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunset');
+    const weatherIconElement = templateElement.querySelector<HTMLImageElement>('.current-weather-icon');
+    const temperatureElement = templateElement.querySelector<HTMLParagraphElement>('.current-temp');
+    const descriptionElement = templateElement.querySelector<HTMLParagraphElement>('.current-description');
+    const windElement = templateElement.querySelector<HTMLParagraphElement>('.current-wind');
+    const humidityElement = templateElement.querySelector<HTMLParagraphElement>('.current-humidity');
+    const pressureElement = templateElement.querySelector<HTMLParagraphElement>('.current-pressure');
+    const sunriseElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunrise');
+    const sunsetElement = templateElement.querySelector<HTMLParagraphElement>('.current-sunset');
     
     return (current: CurrentConditions) => {
         if (templateElement.parentElement == null) {
             parentElement.appendChild(templateElement);
         }
         
-        let date = new Date(current.time * 1000);
-        let sunrise = new Date(current.sunrise * 1000);
-        let sunset = new Date(current.sunset * 1000);
+        const date = new Date(current.time * 1000);
+        const sunrise = new Date(current.sunrise * 1000);
+        const sunset = new Date(current.sunset * 1000);
         
         currentTimeElement.textContent = toTime(date);
         weatherIconElement.src = '/icons/' + toIconName(current.icon) + '.svg';
@@ -99,6 +79,24 @@ export function prepareCurrentConditionsTemplate(templateElement: HTMLElement, c
         sunriseElement.textContent = toTime(sunrise);
         sunsetElement.textContent = toTime(sunset);
     }
+}
+
+export function createDailyCard(dailyForecastEntry: DailyConditions) {
+    const now = new Date();
+    const date = new Date(dailyForecastEntry.time * 1000);
+
+    const li = dailyForecastCardTemplate.cloneNode(true);
+
+    li.children[0].textContent = toDayOfWeek(date.getDay(), now.getDay());
+    li.children[1].textContent = toMonth(date) + ' ' + date.getDate();
+    li.children[2].src = '/icons/' + toIconName(dailyForecastEntry.icon) + '.svg';
+    li.children[2].alt = dailyForecastEntry.description;
+    li.children[2].title = dailyForecastEntry.description;
+    li.children[3].innerHTML =
+        toFahrenheit(dailyForecastEntry.temp.max).toFixed(0) + '&deg; / ' +
+        toFahrenheit(dailyForecastEntry.temp.min).toFixed(0) + '&deg;';
+
+    return li;
 }
 
 export function createHourlyRow(conditions: HourlyConditions, index: number): DocumentFragment {

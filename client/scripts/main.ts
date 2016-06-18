@@ -1,4 +1,4 @@
-import { prepareCurrentConditionsTemplate, prepareDailyCardTemplate, createHourlyRow } from 'templates';
+import { prepareCurrentConditionsTemplate, createDailyCard, createHourlyRow } from 'templates';
 import toIconName from 'icons';
 import { enableDailyScrolling, enableKeyboardScrolling } from 'scrolling';
 
@@ -9,7 +9,6 @@ let currentTimeElement = document.querySelector<HTMLSpanElement>('.current-time'
 let renderCurrentConditions = prepareCurrentConditionsTemplate(currentConditionsContent, currentTimeElement);
 
 let dailyForecastList = document.getElementById<HTMLUListElement>('daily-forecast');
-let createDailyCard = prepareDailyCardTemplate(dailyForecastList.querySelector<HTMLLIElement>('li'));
 
 const hourlyForecastTable = document.getElementById<HTMLTableSectionElement>('hourly-forecast');
 

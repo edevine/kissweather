@@ -1,4 +1,5 @@
 interface Document {
+    createElement<Element extends HTMLElement>(tagName: string): Element;
     getElementById<Node extends HTMLElement>(elementId: string): Node;
 }
 
